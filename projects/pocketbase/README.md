@@ -1,25 +1,62 @@
-# Pocketbase
+PocketBase Angular SDK
+======================================================================
 
-This library was generated with [Angular CLI](https://github.com/angular/angular-cli) version 15.0.0.
+PocketBase Angular SDK for interacting with the [PocketBase API](https://pocketbase.io/docs). Based on the [PocketBase JavaScript SDK](https://github.com/pocketbase/js-sdk)
 
-## Code scaffolding
+- [Installation](#installation)
+- [Usage](#usage)
 
-Run `ng generate component component-name --project pocketbase` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module --project pocketbase`.
 
-> Note: Don't forget to add `--project pocketbase` or else it will be added to the default project in your `angular.json` file.
+## Installation
 
-## Build
+### Node.js (via npm)
 
-Run `ng build pocketbase` to build the project. The build artifacts will be stored in the `dist/` directory.
+```sh
+npm install ngx-pocketbase --save
+```
 
-## Publishing
 
-After building your library with `ng build pocketbase`, go to the dist folder `cd dist/pocketbase` and run `npm publish`.
+## Usage
 
-## Running unit tests
+Add the PocketBase module to your `app.module.ts`:
 
-Run `ng test pocketbase` to execute the unit tests via [Karma](https://karma-runner.github.io).
+```typescript
+import {PocketBaseModule} from 'ngx-pocketbase';
 
-## Further help
+@NgModule({
+    ...
+    imports: [
+        PocketBaseModule.init({ baseUrl: 'http://127.0.0.1:8090' }),
+    ],
+    ...
+})
+export class AppModule {
+}
+```
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+Then, import the PocketBase service and inject it into a constructor:
+
+```typescript
+import { PocketBaseService } from 'ngx-pocketbase';
+
+...
+
+constructor(
+    private pb: PocketBaseService
+) {
+    // list and filter "example" collection records
+    const result = await pb.collection('example').getList(1, 20, {
+        filter: 'status = true && created > "2022-08-01 10:00:00"'
+    });
+
+    // authenticate as auth collection record
+    const userData = await pb.collection('users').authWithPassword('test@example.com', '123456');
+
+    // or as super-admin
+    const adminData = await pb.admins.authWithPassword('test@example.com', '123456');
+
+    // and much more...
+}
+```
+
+> More detailed API docs and copy-paste examples could be found in the [API documentation for each service](https://pocketbase.io/docs/api-records/).
