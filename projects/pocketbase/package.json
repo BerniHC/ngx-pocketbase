@@ -3,8 +3,8 @@
 	"version": "0.14.3",
 	"description": "PocketBase Angular SDK",
 	"peerDependencies": {
-		"@angular/common": "^16.0.0",
-		"@angular/core": "^16.0.0"
+		"@angular/common": "^15.0.0",
+		"@angular/core": "^15.0.0"
 	},
 	"dependencies": {
 		"tslib": "^2.3.0"
