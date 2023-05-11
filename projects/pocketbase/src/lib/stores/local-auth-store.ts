@@ -1,6 +1,8 @@
 import { BaseAuthStore } from './base-auth-store';
 import { Record } from '../models/record';
 import { Admin } from '../models/admin';
+import { SsrCookieService } from 'ngx-cookie-service-ssr';
+import { inject } from '@angular/core';
 
 /**
  * The default token store for browsers with auto fallback
@@ -9,11 +11,13 @@ import { Admin } from '../models/admin';
 export class LocalAuthStore extends BaseAuthStore {
 	private storageFallback: { [key: string]: any } = {};
 	private storageKey: string;
+	private cookieService: SsrCookieService;
 
 	constructor(storageKey = 'pocketbase_auth') {
 		super();
 
 		this.storageKey = storageKey;
+		this.cookieService = inject(SsrCookieService);
 	}
 
 	/**
@@ -78,8 +82,8 @@ export class LocalAuthStore extends BaseAuthStore {
 	 * (or runtime/memory if local storage is undefined).
 	 */
 	private _storageGet(key: string): any {
-		if (typeof window !== 'undefined' && window?.localStorage) {
-			const rawValue = window.localStorage.getItem(key) || '';
+		if (this.cookieService) {
+			const rawValue = this.cookieService.get(key) || '';
 			try {
 				return JSON.parse(rawValue);
 			} catch (e) {
@@ -97,13 +101,13 @@ export class LocalAuthStore extends BaseAuthStore {
 	 * (or runtime/memory if local storage is undefined).
 	 */
 	private _storageSet(key: string, value: any) {
-		if (typeof window !== 'undefined' && window?.localStorage) {
+		if (this.cookieService) {
 			// store in local storage
 			let normalizedVal = value;
 			if (typeof value !== 'string') {
 				normalizedVal = JSON.stringify(value);
 			}
-			window.localStorage.setItem(key, normalizedVal);
+			this.cookieService.set(key, normalizedVal);
 		} else {
 			// store in fallback
 			this.storageFallback[key] = value;
@@ -115,8 +119,8 @@ export class LocalAuthStore extends BaseAuthStore {
 	 */
 	private _storageRemove(key: string) {
 		// delete from local storage
-		if (typeof window !== 'undefined' && window?.localStorage) {
-			window.localStorage?.removeItem(key);
+		if (this.cookieService) {
+			this.cookieService.delete(key);
 		}
 
 		// delete from fallback
