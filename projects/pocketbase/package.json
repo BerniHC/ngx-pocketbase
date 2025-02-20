@@ -1,10 +1,10 @@
 {
 	"name": "ngx-pocketbase",
-	"version": "0.14.3",
+	"version": "1.0.0",
 	"description": "PocketBase Angular SDK",
 	"peerDependencies": {
-		"@angular/common": "^15.0.0",
-		"@angular/core": "^15.0.0"
+		"@angular/common": "^17.0.0",
+		"@angular/core": "^17.0.0"
 	},
 	"dependencies": {
 		"tslib": "^2.3.0"
