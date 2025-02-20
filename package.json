@@ -1,6 +1,6 @@
 {
   "name": "ngx-pocketbase",
-  "version": "1.0.0",
+  "version": "1.0.0-rc.3",
   "description": "PocketBase Angular SDK",
   "scripts": {
     "ng": "ng",
